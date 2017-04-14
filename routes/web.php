@@ -15,7 +15,10 @@ Route::get('/', function () {
     return view('shop.index');
 });
 */
-Route::resource('products','ProductController');
+Route::resource('products','ProductController',['names'=>[
+    'index' =>'products.index',
+  ]
+]);
 Route::get('/add-to-cart/{id}',[
   'uses' => 'ProductController@getAddToCart',
   'as' => 'product.addToCart'
