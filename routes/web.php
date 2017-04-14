@@ -24,6 +24,15 @@ Route::get('/shopping-cart',[
   'uses' => 'ProductController@getCart',
   'as' => 'product.shopping-cart'
 ]);
+Route::get('/checkout',[
+  'uses' => 'ProductController@getCheckout',
+  'as' => 'checkout'
+]);
+
+Route::post('/checkout',[
+  'uses' => 'ProductController@postCheckout',
+  'as' => 'checkout'
+]);
 
 
 Route::group(['prefix'=>'user'],function(){

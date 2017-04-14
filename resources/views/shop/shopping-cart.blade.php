@@ -39,7 +39,7 @@
     <hr>
     <div class="row">
       <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
-        <button type="button" name="button" class="btn btn-success">CheckOut</button>
+        <a href="{{route('checkout')}}" type="button" name="button" class="btn btn-success">CheckOut</a>
       </div>
     </div>
   @else

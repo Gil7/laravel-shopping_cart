@@ -36,6 +36,28 @@ class ProductController extends Controller
         $cart = new Cart($oldCart);
         return view('shop.shopping-cart',['products'=>$cart->items,'total'=>$cart->totalPrice]);
     }
+    public function getCheckout()
+    {
+      if (!Session::has('cart')) {
+        return view('shop.shopping-cart',['products' => null]);
+      }
+
+      $oldCart = Session::get('cart');
+      $cart = new Cart($oldCart);
+      $total = $cart->totalPrice;
+      return view('shop.checkout',['total' => $total]);
+    }
+    public function postCheckout()
+    {
+      if (!Session::has('cart')) {
+        return view('shop.shopping-cart',['products' => null]);
+      }
+
+      $oldCart = Session::get('cart');
+      $cart = new Cart($oldCart);
+      $total = $cart->totalPrice;
+      return view('shop.checkout',['total' => $total]);
+    }
     /**
      * Show the form for creating a new resource.
      *
