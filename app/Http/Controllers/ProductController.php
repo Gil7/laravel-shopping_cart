@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Cart;
 use Illuminate\Http\Request;
 use App\Product;
+use Auth;
+use App\Order;
 use Session;
 use Stripe\Stripe;
 use Stripe\Charge;
@@ -28,6 +30,31 @@ class ProductController extends Controller
         $request->session()->put('cart',$cart);
         return redirect('/products');
 
+    }
+    public function getReduceByOne($id)
+    {
+      $oldCart = Session::has('cart') ? Session::get('cart') : null;
+      $cart = new Cart($oldCart);
+      $cart->reduceByOne($id);
+      if (count($cart->items)>0) {
+          Session::put('cart',$cart);
+      }else{
+        Session::forget('cart');
+      }
+      return redirect()->route('product.shopping-cart');
+    }
+    public function getRemoveItem($id)
+    {
+      $oldCart = Session::has('cart') ? Session::get('cart') : null;
+      $cart = new Cart($oldCart);
+      $cart->removeItem($id);
+      if (count($cart->items)>0) {
+          Session::put('cart',$cart);
+      }else{
+        Session::forget('cart');
+      }
+
+      return redirect()->route('product.shopping-cart');
     }
     public function getCart()
     {
@@ -59,13 +86,19 @@ class ProductController extends Controller
 
       Stripe::setApiKey('sk_test_3QbpbPug7nPfXq6HwOyxrOqB');
       try {
-        Charge::create(array(
+        $charge = Charge::create(array(
           "amount" => $cart->totalPrice * 100,
           "currency" => "usd",
           "source" => $request->input('stripeToken'), // obtained with Stripe.js
           "description" => "Test charge"
         ));
-        //\Stripe\Charge::create();
+        $order = new Order();
+        $order->cart = serialize($cart);
+        $order->name = $request->input('name');
+        $order->address = $request->input('address');
+        $order->payment_id = $charge->id;
+        Auth::user()->orders()->save($order);
+
       } catch (Exception $e) {
           return redirect()->route('checkout')->with('error',$e->getMessage());
       }
@@ -79,7 +112,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -90,7 +123,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product([
+          'title' => $request->input('title'),
+          'description' => $request->input('description'),
+          'price' => $request->input('price'),
+        ]);
+        $name = str_replace(' ', '', $request->title);
+        $image_for_product = $request->file('imagePath');
+        $fileName = $name .".". $image_for_product->getClientOriginalExtension();
+        \Image::make($image_for_product)->resize(250, 150)->save( public_path('/img/products/' . $fileName) );
+        $real_path = '/img/products/' . $fileName;
+        $product->imagePath = $real_path;
+        $product->save();
+        return redirect()->route('products.index');
     }
 
     /**
@@ -101,7 +146,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.show',['product'=>$product]);
     }
 
     /**

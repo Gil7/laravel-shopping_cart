@@ -17,18 +17,18 @@
           <div class="col-xs-12">
             <div class="form-group">
               <label for="name">Name:</label>
-              <input type="text" id="name" class="form-control" required="true">
+              <input type="text" id="name" class="form-control" required="true" name="name">
             </div>
           </div>
           <div class="col-xs-12">
             <div class="form-group">
               <label for="address">Address:</label>
-              <input type="text" id="address" class="form-control" required="true">
+              <input type="text" id="address" class="form-control" required="true" name="address">
             </div>
           </div>
           <div class="col-xs-12">
             <div class="form-group">
-              <label for="card-name">Car Holder Name:</label>
+              <label for="card-name">Card Holder Name:</label>
               <input type="text" id="card-name" class="form-control" required="true">
             </div>
           </div>
@@ -60,6 +60,7 @@
         </div>
         <button type="submit" name="button" class="btn btn-success">Buy now</button>
       </form>
+      <hr>
 
     </div>
   </div>

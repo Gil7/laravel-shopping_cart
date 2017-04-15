@@ -29,7 +29,11 @@
                 <div class="price pull-left">
                   $ {{$product->price}}
                 </div>
+
+              </div>
+              <div class="clearfix">
                 <a href="{{route('product.addToCart' , $product->id)}}" class="btn btn-success pull-right" role="button"><i class="fa fa-cart-plus" aria-hidden="true"></i> Add to cart</a>
+                <a href="{{route('products.show' , $product->id)}}" class="btn btn-info pull-left" role="button"><i class="fa fa-eye" aria-hidden="true"></i> View detail</a>
               </div>
             </div>
           </div>

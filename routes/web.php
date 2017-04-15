@@ -17,11 +17,22 @@ Route::get('/', function () {
 */
 Route::resource('products','ProductController',['names'=>[
     'index' =>'products.index',
+    'create' => 'products.create',
+    'store' => 'products.store',
+    'show' => 'products.show'
   ]
 ]);
 Route::get('/add-to-cart/{id}',[
   'uses' => 'ProductController@getAddToCart',
   'as' => 'product.addToCart'
+]);
+Route::get('/reduce/{id}',[
+  'uses' => 'ProductController@getReduceByOne',
+  'as' => 'product.reduceByOne'
+]);
+Route::get('/remove/{id}',[
+  'uses' => 'ProductController@getRemoveItem',
+  'as' => 'product.removeItem'
 ]);
 Route::get('/shopping-cart',[
   'uses' => 'ProductController@getCart',
@@ -29,12 +40,14 @@ Route::get('/shopping-cart',[
 ]);
 Route::get('/checkout',[
   'uses' => 'ProductController@getCheckout',
-  'as' => 'checkout'
+  'as' => 'checkout',
+  'middleware' => 'auth'
 ]);
 
 Route::post('/checkout',[
   'uses' => 'ProductController@postCheckout',
-  'as' => 'checkout'
+  'as' => 'checkout',
+  'middleware' => 'auth'
 ]);
 
 
